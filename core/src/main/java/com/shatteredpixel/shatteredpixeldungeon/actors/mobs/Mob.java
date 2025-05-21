@@ -102,6 +102,7 @@ import java.util.HashSet;
 
 public abstract class Mob extends Char {
 
+
 	{
 		actPriority = MOB_PRIO;
 		
@@ -780,6 +781,7 @@ public abstract class Mob extends Char {
 		enemy = ch;
 		if (state != PASSIVE){
 			state = HUNTING;
+			GLog.i("mob is now targeting %s!", (ch == Dungeon.hero ? "you" : ch.name()));
 		}
 	}
 
@@ -1165,6 +1167,7 @@ public abstract class Mob extends Char {
 			notice();
 			alerted = true;
 			state = HUNTING;
+			GLog.i("this is now alert!" );
 			target = enemy.pos;
 			
 			if (alignment == Alignment.ENEMY && Dungeon.isChallenged( Challenges.SWARM_INTELLIGENCE )) {
