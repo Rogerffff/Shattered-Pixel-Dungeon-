@@ -538,7 +538,18 @@ public class Bundle {
 				json = new JSONObject().put( DEFAULT_KEY, json );
 			}
 
-			return new Bundle( (JSONObject) json );
+			//return new Bundle( (JSONObject) json );
+			// Wrap JSON strings into an object under the default key
+			if (json instanceof JSONObject) {
+				return new Bundle((JSONObject) json);
+			} else if (json instanceof String) {
+				JSONObject wrapper = new JSONObject();
+				wrapper.put(DEFAULT_KEY, (String) json);
+				return new Bundle(wrapper);
+			} else {
+				// Fallback to empty bundle for unexpected types
+				return new Bundle();
+			}
 		} catch (Exception e) {
 			Game.reportException(e);
 			throw new IOException();

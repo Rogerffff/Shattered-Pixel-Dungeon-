@@ -111,11 +111,16 @@ public abstract class Mob extends Char {
 		alignment = Alignment.ENEMY;
 	}
 
-	public AiState SLEEPING     = new Sleeping();
-	public AiState HUNTING		= new Hunting();
-	public AiState WANDERING	= new Wandering();
-	public AiState FLEEING		= new Fleeing();
-	public AiState PASSIVE		= new Passive();
+//	public AiState SLEEPING     = new Sleeping();
+//	public AiState HUNTING		= new Hunting();
+//	public AiState WANDERING	= new Wandering();
+//	public AiState FLEEING		= new Fleeing();
+//	public AiState PASSIVE		= new Passive();
+    public Sleeping SLEEPING     = new Sleeping();
+	public Hunting HUNTING		= new Hunting();
+	public Wandering WANDERING	= new Wandering();
+	public Fleeing FLEEING		= new Fleeing();
+	public Passive PASSIVE		= new Passive();
 	public AiState state = SLEEPING;
 	
 	public Class<? extends CharSprite> spriteClass;
@@ -228,12 +233,16 @@ public abstract class Mob extends Char {
 		alerted = false;
 		
 		if (justAlerted){
-			sprite.showAlert();
+			if (sprite != null) {
+				sprite.showAlert();
+			}
 		} else {
-			sprite.hideAlert();
-			sprite.hideLost();
+			if (sprite != null) {
+				sprite.hideAlert();
+				sprite.hideLost();
+			}
 		}
-		
+
 		if (paralysed > 0) {
 			enemySeen = false;
 			spend( TICK );
@@ -244,9 +253,9 @@ public abstract class Mob extends Char {
 			state = FLEEING;
 			GLog.i("[%s] [Mob#%d]method: act4Mob. %s 状态变更 → FLEEING", ts(), this.id(), name());   // 插入日志
 		}
-		
+
 		enemy = chooseEnemy();
-		
+
 		boolean enemyInFOV = enemy != null && enemy.isAlive() && fieldOfView[enemy.pos] && enemy.invisible <= 0;
 
 		//prevents action, but still updates enemy seen status
@@ -266,10 +275,10 @@ public abstract class Mob extends Char {
 
 		return result;
 	}
-	
+
 	//FIXME this is sort of a band-aid correction for allies needing more intelligent behaviour
 	protected boolean intelligentAlly = false;
-	
+
 	protected Char chooseEnemy() {
 
 		Dread dread = buff( Dread.class );
@@ -287,7 +296,7 @@ public abstract class Mob extends Char {
 				return source;
 			}
 		}
-		
+
 		//if we are an alert enemy, auto-hunt a target that is affected by aggression, even another enemy
 		if ((alignment == Alignment.ENEMY || buff(Amok.class) != null ) && state != PASSIVE && state != SLEEPING) {
 			if (enemy != null && enemy.buff(StoneOfAggression.Aggression.class) != null){
@@ -341,7 +350,7 @@ public abstract class Mob extends Char {
 							&& fieldOfView[mob.pos] && mob.invisible <= 0) {
 						enemies.add(mob);
 					}
-				
+
 				if (enemies.isEmpty()) {
 					//try to find ally mobs to attack second.
 					for (Mob mob : Dungeon.level.mobs)
@@ -349,7 +358,7 @@ public abstract class Mob extends Char {
 								&& fieldOfView[mob.pos] && mob.invisible <= 0) {
 							enemies.add(mob);
 						}
-					
+
 					if (enemies.isEmpty()) {
 						//try to find the hero third
 						if (fieldOfView[Dungeon.hero.pos] && Dungeon.hero.invisible <= 0) {
@@ -357,7 +366,7 @@ public abstract class Mob extends Char {
 						}
 					}
 				}
-				
+
 			//if we are an ally...
 			} else if ( alignment == Alignment.ALLY ) {
 				//look for hostile mobs to attack
@@ -370,7 +379,7 @@ public abstract class Mob extends Char {
 								(!intelligentAlly || (mob.state != mob.SLEEPING && mob.state != mob.WANDERING))) {
 							enemies.add(mob);
 						}
-				
+
 			//if we are an enemy...
 			} else if (alignment == Alignment.ENEMY) {
 				//look for ally mobs to attack
@@ -382,7 +391,7 @@ public abstract class Mob extends Char {
 				if (fieldOfView[Dungeon.hero.pos] && Dungeon.hero.invisible <= 0) {
 					enemies.add(Dungeon.hero);
 				}
-				
+
 			}
 
 			//do not target anything that's charming us
@@ -440,7 +449,7 @@ public abstract class Mob extends Char {
 		} else
 			return enemy;
 	}
-	
+
 	@Override
 	public boolean add( Buff buff ) {
 		if (super.add( buff )) {
@@ -459,14 +468,17 @@ public abstract class Mob extends Char {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean remove( Buff buff ) {
 		if (super.remove( buff )) {
 			if (state == FLEEING && ((buff instanceof Terror && buff(Dread.class) == null)
 					|| (buff instanceof Dread && buff(Terror.class) == null))) {
 				if (enemySeen) {
-					sprite.showStatus(CharSprite.WARNING, Messages.get(this, "rage"));
+					//sprite.showStatus(CharSprite.WARNING, Messages.get(this, "rage"));
+					if (sprite != null) {
+						sprite.showStatus(CharSprite.WARNING, Messages.get(this, "rage"));
+					}
 					state = HUNTING;
 					GLog.i("[%s] [Mob#%d] method: remove. %s 状态变更 → HUNTING (恐惧消失，保持警觉)", ts(), this.id(), name());
 				} else {
@@ -478,7 +490,7 @@ public abstract class Mob extends Char {
 		}
 		return false;
 	}
-	
+
 	protected boolean canAttack( Char enemy ) {
 		if (Dungeon.level.adjacent( pos, enemy.pos )){
 			return true;
@@ -512,7 +524,7 @@ public abstract class Mob extends Char {
 	}
 
 	protected boolean getCloser( int target ) {
-		
+
 		if (rooted || target == pos) {
 			return false;
 		}
@@ -634,12 +646,12 @@ public abstract class Mob extends Char {
 			return false;
 		}
 	}
-	
+
 	protected boolean getFurther( int target ) {
 		if (rooted || target == pos) {
 			return false;
 		}
-		
+
 		int step = Dungeon.flee( this, target, Dungeon.level.passable, fieldOfView, true );
 		if (step != -1) {
 			move( step );
@@ -656,19 +668,19 @@ public abstract class Mob extends Char {
 				|| Dungeon.hero.buff(Swiftthistle.TimeBubble.class) != null)
 			sprite.add( CharSprite.State.PARALYSED );
 	}
-	
+
 	public float attackDelay() {
 		float delay = 1f;
 		if ( buff(Adrenaline.class) != null) delay /= 1.5f;
 		return delay;
 	}
-	
+
 	protected boolean doAttack( Char enemy ) {
-		
+
 		if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 			sprite.attack( enemy.pos );
 			return false;
-			
+
 		} else {
 			attack( enemy );
 			Invisibility.dispel(this);
@@ -676,7 +688,7 @@ public abstract class Mob extends Char {
 			return true;
 		}
 	}
-	
+
 	@Override
 	public void onAttackComplete() {
 		attack( enemy );
@@ -684,7 +696,7 @@ public abstract class Mob extends Char {
 		spend( attackDelay() );
 		super.onAttackComplete();
 	}
-	
+
 	@Override
 	public int defenseSkill( Char enemy ) {
 		if (buff(GuidingLight.Illuminated.class) != null && Dungeon.hero.heroClass == HeroClass.CLERIC){
@@ -708,16 +720,16 @@ public abstract class Mob extends Char {
 			return 0;
 		}
 	}
-	
+
 	@Override
 	public int defenseProc( Char enemy, int damage ) {
-		
+
 		if (enemy instanceof Hero
 				&& ((Hero) enemy).belongings.attackingWeapon() instanceof MissileWeapon){
 			Statistics.thrownAttacks++;
 			Badges.validateHuntressUnlock();
 		}
-		
+
 		if (surprisedBy(enemy)) {
 			Statistics.sneakAttacks++;
 			Badges.validateRogueUnlock();
@@ -750,7 +762,7 @@ public abstract class Mob extends Char {
 
 		if (buff(SoulMark.class) != null) {
 			int restoration = Math.min(damage, HP+shielding());
-			
+
 			//physical damage that doesn't come from the hero is less effective
 			if (enemy != Dungeon.hero){
 				restoration = Math.round(restoration * 0.4f*Dungeon.hero.pointsInTalent(Talent.SOUL_SIPHON)/3f);
@@ -804,7 +816,7 @@ public abstract class Mob extends Char {
 		if (state == HUNTING) state = WANDERING;
 		GLog.i("[%s] [Mob#%d] method: clearEnemy. %s 丢失目标，状态变更 → WANDERING", ts(), this.id(), name());
 	}
-	
+
 	public boolean isTargeting( Char ch){
 		return enemy == ch;
 	}
@@ -834,16 +846,16 @@ public abstract class Mob extends Char {
 				}
 			}
 		}
-		
+
 		super.damage( dmg, src );
 	}
-	
-	
+
+
 	@Override
 	public void destroy() {
-		
+
 		super.destroy();
-		
+
 		Dungeon.level.mobs.remove( this );
 
 		if (Dungeon.hero.buff(MindVision.class) != null){
@@ -852,7 +864,7 @@ public abstract class Mob extends Char {
 		}
 
 		if (Dungeon.hero.isAlive()) {
-			
+
 			if (alignment == Alignment.ENEMY) {
 				Statistics.enemiesSlain++;
 				Badges.validateMonstersSlain();
@@ -861,7 +873,7 @@ public abstract class Mob extends Char {
 				Bestiary.countEncounter(getClass());
 
 				AscensionChallenge.processEnemyKill(this);
-				
+
 				int exp = Dungeon.hero.lvl <= maxLvl ? EXP : 0;
 
 				//during ascent, under-levelled enemies grant 10 xp each until level 30
@@ -883,7 +895,7 @@ public abstract class Mob extends Char {
 			}
 		}
 	}
-	
+
 	@Override
 	public void die( Object cause ) {
 
@@ -953,7 +965,7 @@ public abstract class Mob extends Char {
 
 		return lootChance * dropBonus;
 	}
-	
+
 	public void rollToDropLoot(){
 		if (Dungeon.hero.lvl > maxLvl + 2) return;
 
@@ -966,7 +978,7 @@ public abstract class Mob extends Char {
 				}
 			}
 		}
-		
+
 		//ring of wealth logic
 		if (Ring.getBuffedBonus(Dungeon.hero, RingOfWealth.Wealth.class) > 0) {
 			int rolls = 1;
@@ -978,7 +990,7 @@ public abstract class Mob extends Char {
 				RingOfWealth.showFlareForBonusDrop(sprite);
 			}
 		}
-		
+
 		//lucky enchant logic
 		if (buff(Lucky.LuckProc.class) != null){
 			Dungeon.level.drop(buff(Lucky.LuckProc.class).genLoot(), pos).sprite.drop();
@@ -992,10 +1004,10 @@ public abstract class Mob extends Char {
 		}
 
 	}
-	
+
 	protected Object loot = null;
 	protected float lootChance = 0;
-	
+
 	@SuppressWarnings("unchecked")
 	public Item createLoot() {
 		Item item;
@@ -1029,15 +1041,15 @@ public abstract class Mob extends Char {
 	public float spawningWeight(){
 		return 1;
 	}
-	
+
 	public boolean reset() {
 		return false;
 	}
-	
+
 	public void beckon( int cell ) {
-		
+
 		notice();
-		
+
 		if (state != HUNTING && state != FLEEING) {
 			state = WANDERING;
 			GLog.i("[%s] [Mob#%d] method: beckon. %s 状态变更 → WANDERING", ts(), this.id(), name());
@@ -1046,7 +1058,7 @@ public abstract class Mob extends Char {
 		GLog.i("[%s] [Mob#%d] method: beckon. %s switches target to %d!", ts(), this.id(), name(), cell);
 
 	}
-	
+
 	public String description() {
 		return Messages.get(this, "desc");
 	}
@@ -1060,9 +1072,11 @@ public abstract class Mob extends Char {
 
 		return desc;
 	}
-	
+
 	public void notice() {
-		sprite.showAlert();
+		if (sprite != null) {
+			sprite.showAlert();
+		}
 	}
 	
 	public void yell( String str ) {
