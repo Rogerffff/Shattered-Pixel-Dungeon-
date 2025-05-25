@@ -76,6 +76,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.PitfallTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.WornDartTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
@@ -260,6 +261,7 @@ public abstract class RegularLevel extends Level {
 			if (tries >= 0) {
 				mobsToSpawn--;
 				mobs.add(mob);
+
 				mob = null;
 
 				//chance to add a second mob to this room, except on floor 1

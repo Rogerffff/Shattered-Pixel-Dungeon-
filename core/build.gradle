@@ -6,4 +6,24 @@ sourceCompatibility = targetCompatibility = appJavaCompatibility
 dependencies {
     api project(':SPD-classes')
     implementation project(':services')
+
+    // ↓—— 在这里添加 JUnit 5 依赖 ——↓
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    // 如果你已经有了 gdxVersion 变量
+    //testImplementation "com.badlogic.gdx:gdx-backend-headless:$gdxVersion"
+    testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    testRuntimeOnly "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
+
+// ↓—— 配置 test 任务使用 JUnit 5 平台 ——↓
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+sourceSets {
+    test {
+        java.srcDirs = ['src/test/java']
+        resources.srcDirs = ['src/test/resources', 'src/main/assets']
+    }
 }

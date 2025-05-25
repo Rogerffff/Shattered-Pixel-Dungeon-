@@ -111,6 +111,8 @@ import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 import com.watabou.utils.SparseArray;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -740,6 +742,7 @@ public abstract class Level implements Bundlable {
 		PathFinder.buildDistanceMap(Dungeon.hero.pos, BArray.or(passable, avoid, null));
 
 		Mob mob = createMob();
+
 		mob.state = mob.WANDERING;
 		int tries = 30;
 		do {
@@ -749,7 +752,7 @@ public abstract class Level implements Bundlable {
 
 		if (Dungeon.hero.isAlive() && mob.pos != -1 && PathFinder.distance[mob.pos] >= disLimit) {
 			GameScene.add( mob );
-			GLog.i("%s emerges from the shadows!", mob.name());
+			GLog.i("[%s] [Mob#%d] %s emerges from the shadows!", ts(),  mob.id(), mob.name());
 			if (!mob.buffs(ChampionEnemy.class).isEmpty()){
 				GLog.w(Messages.get(ChampionEnemy.class, "warn"));
 			}
@@ -757,6 +760,10 @@ public abstract class Level implements Bundlable {
 		} else {
 			return false;
 		}
+	}
+
+	private String ts() {
+		return LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss.SSS"));
 	}
 	
 	public int randomRespawnCell( Char ch ) {
