@@ -139,9 +139,11 @@ public abstract class Mob extends Char {
 
 	protected static final float TIME_TO_WAKE_UP = 1f;
 
+	protected Char targetChar = null;
+
 	protected boolean firstAdded = true;
 	protected void onAdd(){
-		GLog.i("[%s] [Mob#%d] method: onAdd. %s spawned at (%d)", ts(), this.id(), this.name(), pos);
+		GLog.i("[%s] [Mob#%d] %s spawned at (%d)", ts(), this.id(), this.name(), pos);
 		if (firstAdded) {
 			//modify health for ascension challenge if applicable, only on first add
 			float percent = HP / (float) HT;
@@ -251,7 +253,7 @@ public abstract class Mob extends Char {
 
 		if (buff(Terror.class) != null || buff(Dread.class) != null ){
 			state = FLEEING;
-			GLog.i("[%s] [Mob#%d]method: act4Mob. %s 状态变更 → FLEEING", ts(), this.id(), name());   // 插入日志
+			GLog.i("[%s] [Mob#%d] %s State changed → FLEEING", ts(), this.id(), name());   // 插入日志
 		}
 
 		enemy = chooseEnemy();
@@ -301,14 +303,14 @@ public abstract class Mob extends Char {
 		if ((alignment == Alignment.ENEMY || buff(Amok.class) != null ) && state != PASSIVE && state != SLEEPING) {
 			if (enemy != null && enemy.buff(StoneOfAggression.Aggression.class) != null){
 				state = HUNTING;
-				GLog.i("[%s] [Mob#%d] method: chooseEnemy. %s 状态变更 → HUNTING", ts(), this.id(), name());
+				GLog.i("[%s] [Mob#%d] %s State changed → HUNTING", ts(), this.id(), name());
 				return enemy;
 			}
 			for (Char ch : Actor.chars()) {
 				if (ch != this && fieldOfView[ch.pos] &&
 						ch.buff(StoneOfAggression.Aggression.class) != null) {
 					state = HUNTING;
-					GLog.i("[%s] [Mob#%d] method: chooseEnemy. %s 状态变更 → HUNTING", ts(), this.id(), name());
+					GLog.i("[%s] [Mob#%d]  %s State changed → HUNTING", ts(), this.id(), name());
 					return ch;
 				}
 			}
@@ -455,13 +457,13 @@ public abstract class Mob extends Char {
 		if (super.add( buff )) {
 			if (buff instanceof Amok || buff instanceof AllyBuff) {
 				state = HUNTING;
-				GLog.i("[%s] [Mob#%d] method: add. %s 状态变更 → HUNTING (Amok/AllyBuff)", ts(), this.id(), name());
+				GLog.i("[%s] [Mob#%d] %s State changed → HUNTING (Amok/AllyBuff)", ts(), this.id(), name());
 			} else if (buff instanceof Terror || buff instanceof Dread) {
 				state = FLEEING;
-				GLog.i("[%s] [Mob#%d] method: add. %s 状态变更 → FLEEING (Fear)", ts(), this.id(), name());
+				GLog.i("[%s] [Mob#%d] %s State changed → FLEEING (Fear)", ts(), this.id(), name());
 			} else if (buff instanceof Sleep) {
 				state = SLEEPING;
-				GLog.i("[%s] [Mob#%d] method: add. %s 状态变更 → SLEEPING", ts(), this.id(), name());
+				GLog.i("[%s] [Mob#%d] %s 状态变更 → SLEEPING", ts(), this.id(), name());
 				postpone(Sleep.SWS);
 			}
 			return true;
@@ -480,10 +482,10 @@ public abstract class Mob extends Char {
 						sprite.showStatus(CharSprite.WARNING, Messages.get(this, "rage"));
 					}
 					state = HUNTING;
-					GLog.i("[%s] [Mob#%d] method: remove. %s 状态变更 → HUNTING (恐惧消失，保持警觉)", ts(), this.id(), name());
+					GLog.i("[%s] [Mob#%d]  %s State changed → HUNTING (Fear removed, remaining alert)", ts(), this.id(), name());
 				} else {
 					state = WANDERING;
-					GLog.i("[%s] [Mob#%d] method: remove. %s 状态变更 → HUNTING (恐惧消失，保持警觉)", ts(), this.id(), name());
+					GLog.i("[%s] [Mob#%d]  %s State changed → HUNTING (Fear removed, remaining alert)", ts(), this.id(), name());
 				}
 			}
 			return true;
@@ -753,8 +755,17 @@ public abstract class Mob extends Char {
 		if (state != FLEEING) {
 			if (state != HUNTING) {
 				aggro(enemy);
-				target = enemy.pos;
-				GLog.i("[%s] [Mob#%d] method: defenseProc. mob is now switch targeting %s!", ts(), this.id(), enemy.name());
+				//target = enemy.pos;
+				Char newTargetChar = enemy;              // 目标实体
+				int newTarget =  enemy.pos;
+				if (targetChar != newTargetChar) {
+					targetChar = newTargetChar;
+					this.target = newTarget;
+					GLog.i("[%s] [Mob#%d] mob is now switch targeting %s!", ts(), this.id(), enemy.name());  // 原来的日志参数保持不变
+				} else {
+					this.target = newTarget;  // 可选，主要保证 target 始终被更新
+				}
+
 			} else {
 				recentlyAttackedBy.add(enemy);
 			}
@@ -805,8 +816,8 @@ public abstract class Mob extends Char {
 		enemy = ch;
 		if (state != PASSIVE){
 			state = HUNTING;
-			GLog.i("[%s] [Mob#%d] method: aggro. mob is now switch targeting %s!", ts(),  this.id(), (ch == Dungeon.hero ? "you" : ch.name()));
-			GLog.i("[%s] [Mob#%d] method: aggro. %s 不处于PASSIVE，状态变更 → HUNTING", ts(), this.id(), name());
+			//GLog.i("[%s] [Mob#%d] method: aggro. mob is now switch targeting %s!", ts(),  this.id(), (ch == Dungeon.hero ? "you" : ch.name()));
+			GLog.i("[%s] [Mob#%d] %s Not in PASSIVE state, switching state → HUNTING", ts(), this.id(), name());
 		}
 	}
 
@@ -814,7 +825,7 @@ public abstract class Mob extends Char {
 		enemy = null;
 		enemySeen = false;
 		if (state == HUNTING) state = WANDERING;
-		GLog.i("[%s] [Mob#%d] method: clearEnemy. %s 丢失目标，状态变更 → WANDERING", ts(), this.id(), name());
+		GLog.i("[%s] [Mob#%d] %s Target lost, state changed → WANDERING", ts(), this.id(), name());
 	}
 
 	public boolean isTargeting( Char ch){
@@ -827,17 +838,27 @@ public abstract class Mob extends Char {
 		if (!isInvulnerable(src.getClass())) {
 			if (state == SLEEPING) {
 				state = WANDERING;
-				GLog.i("[%s] [Mob#%d] method: damage. %s 被打醒，状态变更 → WANDERING", ts(), this.id(), name());
+				GLog.i("[%s] [Mob#%d] %s Woken by attack, state changed → WANDERING", ts(), this.id(), name());
 			}
 			if (!(src instanceof Corruption) && state != FLEEING) {
 				if (state != HUNTING) {
 					alerted = true;
-					GLog.i("[%s] [Mob#%d] method: damage. %s is alerted!", ts(), this.id(),name());
+					GLog.i("[%s] [Mob#%d] %s is alerted!", ts(), this.id(),name());
 					//assume the hero is hitting us in these common cases
 					if (src instanceof Wand || src instanceof ClericSpell || src instanceof ArmorAbility) {
 						aggro(Dungeon.hero);
-						target = Dungeon.hero.pos;
-						GLog.i("[%s] [Mob#%d] method: damage. %s switches target to %s!", ts(), this.id(), name(), Dungeon.hero.name());
+						//target = Dungeon.hero.pos;
+						//target = enemy.pos;
+						int newTarget =  Dungeon.hero.pos;
+						Char newTargetChar = Dungeon.hero;              // 目标实体
+						if (targetChar != newTargetChar) {
+							targetChar = newTargetChar;
+							this.target = newTarget;
+							GLog.i("[%s] [Mob#%d] mob is now switch targeting %s!", ts(), this.id(), enemy.name());  // 原来的日志参数保持不变
+						} else {
+							this.target = newTarget;  // 可选，主要保证 target 始终被更新
+						}
+						//GLog.i("[%s] [Mob#%d] method: damage. %s switches target to %s!", ts(), this.id(), name(), Dungeon.hero.name());
 					}
 				} else {
 					if (src instanceof Wand || src instanceof ClericSpell || src instanceof ArmorAbility) {
@@ -1052,10 +1073,18 @@ public abstract class Mob extends Char {
 
 		if (state != HUNTING && state != FLEEING) {
 			state = WANDERING;
-			GLog.i("[%s] [Mob#%d] method: beckon. %s 状态变更 → WANDERING", ts(), this.id(), name());
+			GLog.i("[%s] [Mob#%d]  %s switching state → WANDERING", ts(), this.id(), name());
 		}
-		target = cell;
-		GLog.i("[%s] [Mob#%d] method: beckon. %s switches target to %d!", ts(), this.id(), name(), cell);
+		//target = cell;
+		int newTarget = cell;
+		Char newTargetChar = null;
+		if (targetChar != newTargetChar) {
+			targetChar = newTargetChar;
+			this.target = newTarget;
+			GLog.i("[%s] [Mob#%d] %s switches target to %d!", ts(), this.id(), name(), cell);  // 原来的日志参数保持不变
+		} else {
+			this.target = newTarget;  // 可选，主要保证 target 始终被更新
+		}
 
 	}
 
@@ -1158,15 +1187,32 @@ public abstract class Mob extends Char {
 				enemySeen = true;
 				notice();
 				state = HUNTING;
-				GLog.i("[%s] [Mob#%d] method: awaken. %s 睡眠 → 被唤醒，状态变更 → HUNTING", ts(), id(), name());
-				target = enemy.pos;
-				GLog.i("[%s] [Mob#%d] method: awaken. %s switches target to %s!", ts(),  id(), name(), enemy.name());
+				GLog.i("[%s] [Mob#%d] %s SLEEPING → Awakened, state changed → HUNTING", ts(), id(), name());
+				//target = enemy.pos;
+				Char newTargetChar = enemy;              // 目标实体
+				int newTarget = enemy.pos;
+				if (targetChar != newTargetChar) {
+					targetChar = newTargetChar;
+					target = newTarget;
+					GLog.i("[%s] [Mob#%d] %s switches target to %s!", ts(), id(), name(), enemy.name());  // 原来的日志参数保持不变
+				} else {
+					target = newTarget;  // 可选，主要保证 target 始终被更新
+				}
+
 			} else {
 				notice();
 				state = WANDERING;
-				GLog.i("[%s] [Mob#%d] method: awaken. %s 睡眠 → 被唤醒，状态变更 → WANDERING", ts(),  id(), name());
-				target = Dungeon.level.randomDestination( Mob.this );
-				GLog.i("[%s] [Mob#%d] method: awaken. %s switches target to %d!", ts(),  id(), name(), Dungeon.level.randomDestination( Mob.this ));
+				GLog.i("[%s] [Mob#%d] %s SLEEPING → Awakened, state changed → WANDERING", ts(),  id(), name());
+				//target = Dungeon.level.randomDestination( Mob.this );
+				int newTarget = Dungeon.level.randomDestination( Mob.this );
+				Char newTargetChar = null;
+				if (targetChar != newTargetChar) {
+					targetChar = newTargetChar;
+					target = newTarget;
+					GLog.i("[%s] [Mob#%d] %s switches target to %d!", ts(),  id(), name(), Dungeon.level.randomDestination( Mob.this ));
+				} else {
+					target = newTarget;  // 可选，主要保证 target 始终被更新
+				}
 			}
 
 			if (alignment == Alignment.ENEMY && Dungeon.isChallenged(Challenges.SWARM_INTELLIGENCE)) {
@@ -1203,13 +1249,21 @@ public abstract class Mob extends Char {
 
 			notice();
 			alerted = true;
-			GLog.i("[%s] [Mob#%d] method: noticeEnemy. %s is alerted and notices %s!", ts(),  id(), name(), (enemy == Dungeon.hero ? "you" : enemy.name()));
+			GLog.i("[%s] [Mob#%d] %s is alerted and notices %s!", ts(),  id(), name(), (enemy == Dungeon.hero ? "you" : enemy.name()));
 			state = HUNTING;
-			GLog.i("[%s] [Mob#%d] method: noticeEnemy. %s 巡逻 → 发现目标，状态变更 → HUNTING", ts(),  id(), name());
+			GLog.i("[%s] [Mob#%d] %s WANDERING → Target spotted, state changed → HUNTING", ts(),  id(), name());
 
 
-			target = enemy.pos;
-			GLog.i("[%s] [Mob#%d] method: noticeEnemy. mob is now switch targeting %s!", ts(),  id(), (enemy == Dungeon.hero ? "you" : enemy.name()));
+			//target = enemy.pos;
+			int newTarget = enemy.pos;
+			Char newTargetChar = enemy;              // 目标实体
+			if (targetChar != newTargetChar) {
+				target = newTarget;
+				targetChar = newTargetChar;
+				GLog.i("[%s] [Mob#%d] mob is now switch targeting %s!", ts(),  id(), (enemy == Dungeon.hero ? "you" : enemy.name()));
+			} else {
+				target = newTarget;  // 可选，主要保证 target 始终被更新
+			}
 
 			if (alignment == Alignment.ENEMY && Dungeon.isChallenged( Challenges.SWARM_INTELLIGENCE )) {
 				for (Mob mob : Dungeon.level.mobs) {
@@ -1234,8 +1288,16 @@ public abstract class Mob extends Char {
 				spend( 1 / speed() );
 				return moveSprite( oldPos, pos );
 			} else {
-				target = randomDestination();
-				GLog.i("[%s] [Mob#%d] method: continueWandering. mob is now switch targeting %d!", ts(),  id(), target);
+				//target = randomDestination();
+				int newTarget = randomDestination();
+				Char newTargetChar = null;
+				if (targetChar != newTargetChar) {
+					targetChar = newTargetChar;
+					target = newTarget;
+					GLog.i("[%s] [Mob#%d] mob is now switch targeting %d!", ts(),  id(), target);
+				} else {
+					target = newTarget;  // 可选，主要保证 target 始终被更新
+				}
 				spend( TICK );
 			}
 			
@@ -1262,10 +1324,20 @@ public abstract class Mob extends Char {
 		public boolean act( boolean enemyInFOV, boolean justAlerted ) {
 			enemySeen = enemyInFOV;
 			if (enemyInFOV && !isCharmedBy( enemy ) && canAttack( enemy )) {
+				Char newTargetChar = enemy;              // 目标实体
+				//int newTargetCell = (newTargetChar != null ? newTargetChar.pos : -1);
+
 
 				recentlyAttackedBy.clear();
-				target = enemy.pos;
-				GLog.i("[%s] [Mob#%d] method: act4Hunting. %s switches target to %s!", ts(),  id(), name(), enemy.name());
+				//target = enemy.pos;
+				int newTarget = enemy.pos;
+				if (targetChar != newTargetChar) {
+					targetChar = newTargetChar;
+					target = newTarget;
+					GLog.i("[%s] [Mob#%d] %s switches target to %s!", ts(),  id(), name(), enemy.name());
+				} else {
+					target = newTarget;  // 可选，主要保证 target 始终被更新
+				}
 				return doAttack( enemy );
 
 			} else {
@@ -1278,10 +1350,18 @@ public abstract class Mob extends Char {
 						if (ch != null && ch.isActive() && Actor.chars().contains(ch) && alignment != ch.alignment && fieldOfView[ch.pos] && ch.invisible == 0 && !isCharmedBy(ch)) {
 							if (canAttack(ch) || enemy == null || Dungeon.level.distance(pos, ch.pos) < Dungeon.level.distance(pos, enemy.pos)) {
 								enemy = ch;
-								target = ch.pos;
+								//target = ch.pos;
 								enemyInFOV = true;
 								swapped = true;
-								GLog.i("[%s] [Mob#%d] method: act4Hunting. %s switches target to %s!", ts(),  id(), name(), ch.name());
+								int newTarget = ch.pos;
+								Char newTargetChar = ch;              // 目标实体
+								if (targetChar != newTargetChar) {
+									targetChar = newTargetChar;
+									target = newTarget;
+									GLog.i("[%s] [Mob#%d] %s switches target to %s!", ts(),  id(), name(), ch.name());
+								} else {
+									target = newTarget;  // 可选，主要保证 target 始终被更新
+								}
 							}
 						}
 					}
@@ -1292,14 +1372,30 @@ public abstract class Mob extends Char {
 				}
 
 				if (enemyInFOV) {
-					target = enemy.pos;
-					GLog.i("[%s] [Mob#%d] method: act4Hunting. %s switches target to %s!", ts(),  id(), name(), enemy.name());
+					//target = enemy.pos;
+					int newTarget = enemy.pos;
+					Char newTargetChar = enemy;              // 目标实体
+					if (targetChar != newTargetChar) {
+						targetChar = newTargetChar;
+						target = newTarget;
+						GLog.i("[%s] [Mob#%d] %s switches target to %s!", ts(),  id(), name(), enemy.name());
+					} else {
+						target = newTarget;  // 可选，主要保证 target 始终被更新
+					}
 				} else if (enemy == null) {
 					sprite.showLost();
 					state = WANDERING;
-					GLog.i("[%s] [Mob#%d] method: act4Hunting. %s 追击 → 目标丢失，状态变更 → WANDERING", ts(),  id(), name());
-					target = ((Mob.Wandering)WANDERING).randomDestination();
-					GLog.i("[%s] [Mob#%d] method: act4Hunting. %s switches target to %d!", ts(),  id(), name(), target);
+					GLog.i("[%s] [Mob#%d] %s HUNTING → Target lost, state changed → WANDERING", ts(),  id(), name());
+					//target = ((Mob.Wandering)WANDERING).randomDestination();
+					Char newTargetChar = null;
+					int newTarget = ((Mob.Wandering)WANDERING).randomDestination();
+					if (targetChar != newTargetChar) {
+						targetChar = newTargetChar;
+						target = newTarget;
+						GLog.i("[%s] [Mob#%d] %s switches target to %d!", ts(),  id(), name(), target);
+					} else {
+						target = newTarget;  // 可选，主要保证 target 始终被更新
+					}
 					spend( TICK );
 					return true;
 				}
@@ -1330,9 +1426,17 @@ public abstract class Mob extends Char {
 					if (!enemyInFOV) {
 						sprite.showLost();
 						state = WANDERING;
-						GLog.i("[%s] [Mob#%d] method: act4Hunting. %s 追击 → 目标丢失，状态变更 → WANDERING", ts(),  id(), name());
-						target = ((Mob.Wandering)WANDERING).randomDestination();
-						GLog.i("[%s] [Mob#%d] method: act4Hunting. %s switches target to %s!", ts(),  id(), name(), target);
+						GLog.i("[%s] [Mob#%d]  %s HUNTING → Target lost, state changed → WANDERING", ts(),  id(), name());
+						//target = ((Mob.Wandering)WANDERING).randomDestination();
+						int newTarget = ((Mob.Wandering)WANDERING).randomDestination();
+						Char newTargetChar = null;              // 目标实体
+						if (targetChar != newTargetChar) {
+							targetChar = newTargetChar;
+							target = newTarget;
+							GLog.i("[%s] [Mob#%d] %s switches target to %d!", ts(),  id(), name(), target);
+						} else {
+							target = newTarget;  // 可选，主要保证 target 始终被更新
+						}
 					}
 					return true;
 				}
@@ -1357,8 +1461,16 @@ public abstract class Mob extends Char {
 			
 			//if enemy isn't in FOV, keep running from their previous position.
 			} else if (enemyInFOV) {
-				target = enemy.pos;
-				GLog.i("[%s] [Mob#%d] method: act4FLEEING. %s switches target to %s!", ts(),  id(), name(), enemy.name());
+				//target = enemy.pos;
+				int newTarget = enemy.pos;
+				Char newTargetChar = enemy;
+				if (targetChar != newTargetChar) {
+					targetChar = newTargetChar;
+					target = newTarget;
+					GLog.i("[%s] [Mob#%d] %s switches target to %s!", ts(),  id(), name(), enemy.name());
+				} else {
+					target = newTarget;  // 可选，主要保证 target 始终被更新
+				}
 			}
 
 			int oldPos = pos;
@@ -1386,10 +1498,10 @@ public abstract class Mob extends Char {
 				if (enemySeen) {
 					sprite.showStatus(CharSprite.WARNING, Messages.get(Mob.class, "rage"));
 					state = HUNTING;
-					GLog.i("[%s] [Mob#%d] method: nowhereToRun. %s 逃跑 → 无路可逃，状态变更 → HUNTING", ts(),  id(), name(), id());
+					GLog.i("[%s] [Mob#%d] %s FLEEING → Nowhere to run, state changed → HUNTING", ts(),  id(), name(), id());
 				} else {
 					state = WANDERING;
-					GLog.i("[%s] [Mob#%d] method: nowhereToRun. %s 逃跑 → 无路可逃，状态变更 → WANDERING", ts(),  id(), name());
+					GLog.i("[%s] [Mob#%d] %s FLEEING → Nowhere to run, state changed → WANDERING", ts(),  id(), name());
 				}
 			}
 		}

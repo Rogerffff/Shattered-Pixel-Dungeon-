@@ -37,6 +37,7 @@ public class GLog {
 	public static final String NEW_LINE	    = "\n";
 	
 	public static Signal<String> update = new Signal<>();
+	private static MobLogger mobLogger = new MobLogger();
 
 	public static void newLine(){
 		update.dispatch( NEW_LINE );
@@ -50,6 +51,11 @@ public class GLog {
 		
 		DeviceCompat.log( TAG, text );
 		update.dispatch( text );
+
+		// 如果是mob相关日志，也写入文件
+		if (text.contains("[Mob#") || text.contains("emerges from the shadows")) {
+			mobLogger.log(text);
+		}
 	}
 	
 	public static void p( String text, Object... args ) {

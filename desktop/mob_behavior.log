@@ -1,0 +1,99 @@
+
+=== New Session Started at 2025-05-25 19:16:27.363 ===
+[2025-05-25 19:16:27.364] [19:16:27.352] [Mob#5] method: onAdd. 下水道巨蛇 spawned at (223)
+[2025-05-25 19:16:27.364] [19:16:27.364] [Mob#6] method: onAdd. 啮齿小鼠 spawned at (503)
+[2025-05-25 19:16:27.364] [19:16:27.364] [Mob#7] method: onAdd. 啮齿小鼠 spawned at (491)
+[2025-05-25 19:16:27.364] [19:16:27.364] [Mob#8] method: onAdd. 啮齿小鼠 spawned at (889)
+[2025-05-25 19:16:27.364] [19:16:27.364] [Mob#9] method: onAdd. 啮齿小鼠 spawned at (830)
+[2025-05-25 19:16:27.365] [19:16:27.364] [Mob#10] method: onAdd. 下水道巨蛇 spawned at (788)
+[2025-05-25 19:16:27.365] [19:16:27.365] [Mob#11] method: onAdd. 啮齿小鼠 spawned at (253)
+[2025-05-25 19:16:27.365] [19:16:27.365] [Mob#12] method: onAdd. 啮齿小鼠 spawned at (370)
+[2025-05-25 19:16:33.939] [19:16:33.939] [Mob#12] method: awaken. 啮齿小鼠 睡眠 → 被唤醒，状态变更 → HUNTING
+[2025-05-25 19:16:33.939] [19:16:33.939] [Mob#12] method: awaken. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 19:16:34.122] [19:16:34.122] [Mob#12] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 19:16:34.855] [19:16:34.854] [Mob#12] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 19:16:35.238] [19:16:35.238] [Mob#12] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 19:16:45.970] [19:16:45.969] [Mob#12] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 19:16:46.624] [19:16:46.624] [Mob#12] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 19:16:47.356] [19:16:47.355] [Mob#7] method: awaken. 啮齿小鼠 睡眠 → 被唤醒，状态变更 → HUNTING
+[2025-05-25 19:16:47.356] [19:16:47.356] [Mob#7] method: awaken. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 19:16:47.489] [19:16:47.488] [Mob#7] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 19:16:49.123] [19:16:49.123] [Mob#7] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+
+=== New Session Started at 2025-05-25 22:23:58.284 ===
+[2025-05-25 22:23:58.285] [22:23:58.281] [Mob#5] method: onAdd. 下水道巨蛇 spawned at (766)
+[2025-05-25 22:23:58.285] [22:23:58.285] [Mob#6] method: onAdd. 啮齿小鼠 spawned at (506)
+[2025-05-25 22:23:58.285] [22:23:58.285] [Mob#7] method: onAdd. 啮齿小鼠 spawned at (379)
+[2025-05-25 22:23:58.285] [22:23:58.285] [Mob#8] method: onAdd. 啮齿小鼠 spawned at (785)
+[2025-05-25 22:23:58.285] [22:23:58.285] [Mob#9] method: onAdd. 啮齿小鼠 spawned at (837)
+[2025-05-25 22:23:58.286] [22:23:58.286] [Mob#10] method: onAdd. 下水道巨蛇 spawned at (687)
+[2025-05-25 22:23:58.286] [22:23:58.286] [Mob#11] method: onAdd. 啮齿小鼠 spawned at (1251)
+[2025-05-25 22:23:58.286] [22:23:58.286] [Mob#12] method: onAdd. 啮齿小鼠 spawned at (1090)
+[2025-05-25 22:24:01.048] [22:24:01.047] [Mob#7] method: awaken. 啮齿小鼠 睡眠 → 被唤醒，状态变更 → HUNTING
+[2025-05-25 22:24:01.049] [%s] [Mob#%d] method: beckon. %s switches target to %d!
+[2025-05-25 22:24:02.198] [22:24:02.198] [Mob#7] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 22:24:02.381] [22:24:02.380] [Mob#7] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 22:24:02.732] [22:24:02.732] [Mob#7] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 22:24:15.981] [22:24:15.981] [Mob#6] method: awaken. 啮齿小鼠 睡眠 → 被唤醒，状态变更 → HUNTING
+[2025-05-25 22:24:15.982] [%s] [Mob#%d] method: beckon. %s switches target to %d!
+[2025-05-25 22:24:16.816] [22:24:16.814] [Mob#6] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+
+=== New Session Started at 2025-05-25 22:30:42.387 ===
+[2025-05-25 22:30:42.388] [22:30:42.384] [Mob#4] method: onAdd. 啮齿小鼠 spawned at (722)
+[2025-05-25 22:30:42.388] [22:30:42.388] [Mob#5] method: onAdd. 啮齿小鼠 spawned at (859)
+[2025-05-25 22:30:42.388] [22:30:42.388] [Mob#6] method: onAdd. 下水道巨蛇 spawned at (829)
+[2025-05-25 22:30:42.388] [22:30:42.388] [Mob#7] method: onAdd. 啮齿小鼠 spawned at (641)
+[2025-05-25 22:30:42.389] [22:30:42.389] [Mob#8] method: onAdd. 下水道巨蛇 spawned at (678)
+[2025-05-25 22:30:42.389] [22:30:42.389] [Mob#9] method: onAdd. 啮齿小鼠 spawned at (619)
+[2025-05-25 22:30:42.389] [22:30:42.389] [Mob#10] method: onAdd. 啮齿小鼠 spawned at (895)
+[2025-05-25 22:30:42.389] [22:30:42.389] [Mob#11] method: onAdd. 啮齿小鼠 spawned at (1026)
+[2025-05-25 22:30:49.021] [22:30:49.021] [Mob#4] method: awaken. 啮齿小鼠 睡眠 → 被唤醒，状态变更 → HUNTING
+[2025-05-25 22:30:49.022] [22:30:49.022] [Mob#4] method: beckon. 啮齿小鼠 switches target to 女猎手!
+[2025-05-25 22:30:49.022] [22:30:49.022] [Mob#9] method: awaken. 啮齿小鼠 睡眠 → 被唤醒，状态变更 → HUNTING
+[2025-05-25 22:30:49.022] [22:30:49.022] [Mob#9] method: beckon. 啮齿小鼠 switches target to 女猎手!
+[2025-05-25 22:30:50.770] [22:30:50.770] [Mob#4] method: act4Hunting. 啮齿小鼠 switches target to 女猎手!
+[2025-05-25 22:30:50.770] [22:30:50.770] [Mob#9] method: act4Hunting. 啮齿小鼠 switches target to 女猎手!
+[2025-05-25 22:30:51.355] [22:30:51.355] [Mob#4] method: act4Hunting. 啮齿小鼠 switches target to 女猎手!
+[2025-05-25 22:30:51.356] [22:30:51.356] [Mob#9] method: act4Hunting. 啮齿小鼠 switches target to 女猎手!
+[2025-05-25 22:30:53.071] [22:30:53.071] [Mob#4] method: act4Hunting. 啮齿小鼠 switches target to 女猎手!
+
+=== New Session Started at 2025-05-25 22:37:00.239 ===
+[2025-05-25 22:37:00.239] [22:37:00.235] [Mob#5] method: onAdd. 啮齿小鼠 spawned at (312)
+[2025-05-25 22:37:00.239] [22:37:00.239] [Mob#6] method: onAdd. 啮齿小鼠 spawned at (295)
+[2025-05-25 22:37:00.240] [22:37:00.239] [Mob#7] method: onAdd. 下水道巨蛇 spawned at (646)
+[2025-05-25 22:37:00.240] [22:37:00.240] [Mob#8] method: onAdd. 啮齿小鼠 spawned at (587)
+[2025-05-25 22:37:00.240] [22:37:00.240] [Mob#9] method: onAdd. 啮齿小鼠 spawned at (388)
+[2025-05-25 22:37:00.240] [22:37:00.240] [Mob#10] method: onAdd. 下水道巨蛇 spawned at (314)
+[2025-05-25 22:37:00.240] [22:37:00.240] [Mob#11] method: onAdd. 啮齿小鼠 spawned at (122)
+[2025-05-25 22:37:00.240] [22:37:00.240] [Mob#12] method: onAdd. 啮齿小鼠 spawned at (836)
+[2025-05-25 22:37:03.014] [22:37:03.014] [Mob#9] method: awaken. 啮齿小鼠 睡眠 → 被唤醒，状态变更 → HUNTING
+[2025-05-25 22:37:03.014] [22:37:03.014] [Mob#9] method: beckon. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 22:37:03.346] [22:37:03.345] [Mob#9] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 22:37:09.680] [22:37:09.680] [Mob#7] method: awaken. 下水道巨蛇 睡眠 → 被唤醒，状态变更 → HUNTING
+[2025-05-25 22:37:09.681] [22:37:09.681] [Mob#7] method: beckon. 下水道巨蛇 switches target to 决斗家!
+[2025-05-25 22:37:10.845] [22:37:10.845] [Mob#7] method: act4Hunting. 下水道巨蛇 switches target to 决斗家!
+[2025-05-25 22:37:10.847] [22:37:10.847] [Mob#8] method: awaken. 啮齿小鼠 睡眠 → 被唤醒，状态变更 → HUNTING
+[2025-05-25 22:37:10.847] [22:37:10.847] [Mob#8] method: beckon. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 22:37:11.379] [22:37:11.378] [Mob#7] method: act4Hunting. 下水道巨蛇 switches target to 决斗家!
+[2025-05-25 22:37:11.712] [22:37:11.712] [Mob#8] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 22:37:13.762] [22:37:13.762] [Mob#8] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 22:37:14.396] [22:37:14.396] [Mob#8] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+[2025-05-25 22:37:14.962] [22:37:14.962] [Mob#8] method: act4Hunting. 啮齿小鼠 switches target to 决斗家!
+
+=== New Session Started at 2025-05-25 22:57:26.259 ===
+[2025-05-25 22:57:26.260] [22:57:26.255] [Mob#4] method: onAdd. 啮齿小鼠 spawned at (966)
+[2025-05-25 22:57:26.260] [22:57:26.260] [Mob#5] method: onAdd. 啮齿小鼠 spawned at (432)
+[2025-05-25 22:57:26.260] [22:57:26.260] [Mob#6] method: onAdd. 啮齿小鼠 spawned at (788)
+[2025-05-25 22:57:26.260] [22:57:26.260] [Mob#7] method: onAdd. 下水道巨蛇 spawned at (438)
+[2025-05-25 22:57:26.260] [22:57:26.260] [Mob#8] method: onAdd. 下水道巨蛇 spawned at (393)
+[2025-05-25 22:57:26.260] [22:57:26.260] [Mob#9] method: onAdd. 啮齿小鼠 spawned at (535)
+[2025-05-25 22:57:26.260] [22:57:26.260] [Mob#10] method: onAdd. 啮齿小鼠 spawned at (998)
+[2025-05-25 22:57:26.260] [22:57:26.260] [Mob#11] method: onAdd. 啮齿小鼠 spawned at (1004)
+[2025-05-25 22:57:28.181] [22:57:28.181] [Mob#6] method: awaken. 啮齿小鼠 睡眠 → 被唤醒，状态变更 → HUNTING
+[2025-05-25 22:57:28.186] [22:57:28.181] [Mob#6] method: beckon. 啮齿小鼠 switches target to 女猎手!
+[2025-05-25 22:57:31.464] [22:57:31.464] [Mob#11] method: awaken. 啮齿小鼠 睡眠 → 被唤醒，状态变更 → HUNTING
+[2025-05-25 22:57:31.464] [22:57:31.464] [Mob#11] method: beckon. 啮齿小鼠 switches target to 女猎手!
+[2025-05-25 22:57:32.213] [22:57:32.213] [Mob#4] method: awaken. 啮齿小鼠 睡眠 → 被唤醒，状态变更 → HUNTING
+[2025-05-25 22:57:32.213] [22:57:32.213] [Mob#4] method: beckon. 啮齿小鼠 switches target to 女猎手!
+[2025-05-25 22:57:32.463] [22:57:32.463] [Mob#10] method: awaken. 啮齿小鼠 睡眠 → 被唤醒，状态变更 → HUNTING
+[2025-05-25 22:57:32.464] [22:57:32.464] [Mob#10] method: beckon. 啮齿小鼠 switches target to 女猎手!
