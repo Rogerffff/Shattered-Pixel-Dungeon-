@@ -463,7 +463,7 @@ public abstract class Mob extends Char {
 				GLog.i("[%s] [Mob#%d] %s State changed → FLEEING (Fear)", ts(), this.id(), name());
 			} else if (buff instanceof Sleep) {
 				state = SLEEPING;
-				GLog.i("[%s] [Mob#%d] %s 状态变更 → SLEEPING", ts(), this.id(), name());
+				GLog.i("[%s] [Mob#%d] %s State changed → SLEEPING", ts(), this.id(), name());
 				postpone(Sleep.SWS);
 			}
 			return true;
